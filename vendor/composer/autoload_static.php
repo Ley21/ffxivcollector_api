@@ -306,6 +306,14 @@ class ComposerStaticInit2558bdfeb5cda506f66d1101b127caff
     );
 
     public static $classMap = array (
+        'CreateFKPlayerMinionTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_084150_create_FK_player_minion_table.php',
+        'CreateFKPlayerMountTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_084610_create_FK_player_mount_table.php',
+        'CreateMinionMethodTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_085329_create_minion_method_table.php',
+        'CreateMinionsTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_082845_create_minions_table.php',
+        'CreateMountMethodTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_085556_create_mount_method_table.php',
+        'CreateMountsTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_083645_create_mounts_table.php',
+        'CreatePlayersTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_082819_create_players_table.php',
+        'CreateVerminionTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_085918_create_verminion_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'ExampleTest' => __DIR__ . '/../..' . '/tests/ExampleTest.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
