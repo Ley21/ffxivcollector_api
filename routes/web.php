@@ -16,4 +16,6 @@ $app->get('/', function () use ($app) {
 });
 $app->get('player', "PlayerController@index");
 $app->get('minion', "MinionController@index");
-$app->post('minion', "MinionController@store")->middleware(App\Http\Middleware\BasicAuth::class);
+$app->post('minion', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MinionController@store"]);

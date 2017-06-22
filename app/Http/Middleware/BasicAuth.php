@@ -19,7 +19,7 @@ class BasicAuth
             $_ENV['APP_PASSWORD'] != $request->getPassword()){
                 $user = $request->getUser();
                 $password = $request->getPassword();
-                return response("Unauthorized. $user $password", 401);
+                return response("Unauthorized.", 401);
         }
         return $next($request);
     }
