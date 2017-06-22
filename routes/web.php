@@ -16,6 +16,11 @@ $app->get('/', function () use ($app) {
 });
 $app->get('player', "PlayerController@index");
 $app->get('minion', "MinionController@index");
+$app->get('minion/{id}', "MinionController@show");
+$app->get('minion/{id}/verminion', "MinionController@verminion");
 $app->post('minion', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MinionController@store"]);
+$app->put('minion/{id}', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MinionController@update"]);

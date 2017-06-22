@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVerminionTable extends Migration
+class CreateVerminionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateVerminionTable extends Migration
      */
     public function up()
     {
-        Schema::create('verminion', function (Blueprint $table) {
+        Schema::create('verminions', function (Blueprint $table) {
             $table->integer('id');
             $table->string('race',100);
             $table->integer('cost');

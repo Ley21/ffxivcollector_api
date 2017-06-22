@@ -13,7 +13,7 @@ return array(
     'CreateMountMethodTable' => $baseDir . '/database/migrations/2017_06_21_085556_create_mount_method_table.php',
     'CreateMountsTable' => $baseDir . '/database/migrations/2017_06_21_083645_create_mounts_table.php',
     'CreatePlayersTable' => $baseDir . '/database/migrations/2017_06_21_082819_create_players_table.php',
-    'CreateVerminionTable' => $baseDir . '/database/migrations/2017_06_21_085918_create_verminion_table.php',
+    'CreateVerminionsTable' => $baseDir . '/database/migrations/2017_06_21_085918_create_verminions_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
