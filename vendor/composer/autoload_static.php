@@ -35,6 +35,7 @@ class ComposerStaticInit2558bdfeb5cda506f66d1101b127caff
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Debug\\' => 24,
+            'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
         ),
         'P' => 
@@ -142,6 +143,10 @@ class ComposerStaticInit2558bdfeb5cda506f66d1101b127caff
         'Symfony\\Component\\Debug\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/debug',
+        ),
+        'Symfony\\Component\\CssSelector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/css-selector',
         ),
         'Symfony\\Component\\Console\\' => 
         array (
@@ -294,6 +299,13 @@ class ComposerStaticInit2558bdfeb5cda506f66d1101b127caff
             'Mockery' => 
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
+            ),
+        ),
+        'L' => 
+        array (
+            'Lodestone\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/viion/lodestone-php/src',
             ),
         ),
         'D' => 
