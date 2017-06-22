@@ -123,7 +123,6 @@ class MountController extends Controller
             'summon_ja' => 'required',
         ]);
         
-        $mount->id = $request->id;
         $mount->name = $request->name;
         $mount->icon_url = $request->icon2;
         $mount->picture_url = $request->icon;
