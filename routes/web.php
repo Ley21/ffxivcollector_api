@@ -15,6 +15,7 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 $app->get('player', "PlayerController@index");
+
 $app->get('minion', "MinionController@index");
 $app->get('minion/{id}', "MinionController@show");
 $app->get('minion/{id}?data=verminion', "MinionController@verminion");
@@ -24,3 +25,12 @@ $app->post('minion', [
 $app->put('minion/{id}', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MinionController@update"]);
+
+$app->get('mount', "MountController@index");    
+$app->get('mount/{id}', "MountController@show");
+$app->post('mount', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MountController@store"]);
+$app->put('mount/{id}', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MountController@update"]);

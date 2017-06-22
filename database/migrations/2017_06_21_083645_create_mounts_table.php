@@ -32,7 +32,6 @@ class CreateMountsTable extends Migration
             $table->text('summon_fr');
             $table->text('summon_de');
             $table->text('summon_ja');
-            $table->string('behavior',100);
             $table->tinyInteger('sellable')->default(0);
             $table->primary('id');
         });
