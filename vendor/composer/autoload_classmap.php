@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'ChangeTitleToNullable' => $baseDir . '/database/migrations/2017_06_26_115942_change_title_to_nullable.php',
     'CreateFKPlayerMinionTable' => $baseDir . '/database/migrations/2017_06_21_084150_create_FK_player_minion_table.php',
     'CreateFKPlayerMountTable' => $baseDir . '/database/migrations/2017_06_21_084610_create_FK_player_mount_table.php',
     'CreateMinionMethodTable' => $baseDir . '/database/migrations/2017_06_21_085329_create_minion_method_table.php',

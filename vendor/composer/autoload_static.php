@@ -318,6 +318,7 @@ class ComposerStaticInit2558bdfeb5cda506f66d1101b127caff
     );
 
     public static $classMap = array (
+        'ChangeTitleToNullable' => __DIR__ . '/../..' . '/database/migrations/2017_06_26_115942_change_title_to_nullable.php',
         'CreateFKPlayerMinionTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_084150_create_FK_player_minion_table.php',
         'CreateFKPlayerMountTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_084610_create_FK_player_mount_table.php',
         'CreateMinionMethodTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_085329_create_minion_method_table.php',

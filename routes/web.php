@@ -11,10 +11,15 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
-});
-$app->get('player', "PlayerController@index");
+//Player
+
+//$app->get('player', "PlayerController@index");
+$app->post('player', "PlayerController@store");
+$app->put('player/{id}', "PlayerController@update");
+$app->get('player/{id}', "PlayerController@show");
+
+
+//Minion
 
 $app->get('minion', "MinionController@index");
 $app->get('minion/{id}', "MinionController@show");
@@ -26,6 +31,8 @@ $app->put('minion/{id}', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MinionController@update"]);
 
+//Mount
+
 $app->get('mount', "MountController@index");    
 $app->get('mount/{id}', "MountController@show");
 $app->post('mount', [
@@ -34,3 +41,7 @@ $app->post('mount', [
 $app->put('mount/{id}', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MountController@update"]);
+    
+//Search
+    
+$app->get('search', ['as' => 'search', 'uses' => 'SearchController@search']);

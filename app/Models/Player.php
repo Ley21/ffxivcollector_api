@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 
 final class Player extends Model  
 {
-
+public $timestamps = false;
 }
