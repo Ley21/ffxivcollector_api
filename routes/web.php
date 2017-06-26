@@ -17,7 +17,7 @@
 $app->post('player', "PlayerController@store");
 $app->put('player/{id}', "PlayerController@update");
 $app->get('player/{id}', "PlayerController@show");
-
+$app->get('player/{id}/mount', "PlayerController@indexMounts");
 
 //Minion
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Player;
+use App\Models\PlayerMount;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -48,6 +49,12 @@ class PlayerController extends Controller
     }
 
 
+    public function indexMounts($id)
+    {
+        $player = Player::findOrFail($id);
+        return $player->mounts()->toJson();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -67,34 +74,17 @@ class PlayerController extends Controller
         $player->id = $request->lodestone_id;
         $player->name = $request->name;
         
-        if(!property_exists($request,"data")){
-            $player->world = $lodestone->server;
-            $player->title = $lodestone->title;
-            $player->portrait = $lodestone->portrait;
-            $player->race = $lodestone->race;
-            $player->clan = $lodestone->clan;
-            $player->gender = $lodestone->gender;
-            $player->nameday = $lodestone->nameday;
-            $player->guardian = $lodestone->guardian['name'];
-            if($lodestone->grand_company != null){
-                $player->grand_company = $lodestone->grand_company['name'];
-            }
-            $player->last_update_date = date("Y-m-d H:i:s");
+        if($request->data){
+            echo "XIVDB update";
+            $player = PlayerController::set_player_model($player,(object)$request->data);
+            PlayerController::set_mounts($player->id,$request->data['mounts']);
         }else{
-            
-            $player->world = $request->data['server'];
-            $player->title = $request->data['title'];
-            $player->portrait = $request->data['portrait'];
-            $player->race = $request->data['race'];
-            $player->clan = $request->data['clan'];
-            $player->gender = $request->data['gender'];
-            $player->nameday = $request->data['nameday'];
-            $player->guardian = $request->data['guardian']['name'];
-            $player->grand_company = $request->data['grand_company']['name'];
-            
-            //$date = DateTime::createFromFormat('Y-m-d H:i:s', $request->last_updated);
-            $player->last_update_date = $request->last_updated;
+            echo "Lodestone update";
+            $player = PlayerController::set_player_model($player,$lodestone);
         }
+        
+        $player->last_update_date = date("Y-m-d H:i:s");
+        
         // Workaround - For FreeCompany
         if($lodestone->free_company != null){
             $fc_id = $lodestone->free_company;
@@ -107,6 +97,7 @@ class PlayerController extends Controller
         }
         $player->save();
     }
+    
     
 
     /**
@@ -122,7 +113,6 @@ class PlayerController extends Controller
             'lodestone_id' => 'required',
             'name' => 'required',
             'server' => 'required',
-            'data' => 'required',
         ]);
         $api = new \Lodestone\Api;
         $lodestone = (object)$api->getCharacter($request->lodestone_id);
@@ -132,22 +122,20 @@ class PlayerController extends Controller
         // Check if a update is required.
         $source_date = strtotime(explode(" ",$request->last_updated)[0]);
         $db_date = strtotime($player->last_update_date);
-        if($db_date >= $source_date)
-        {
-            return "No update required.";
-        }
+        
         
         $player->name = $request->name;
-        $player->world = $request->data['server'];
-        $player->title = $request->data['title'];
-        $player->portrait = $request->data['portrait'];
-        $player->race = $request->data['race'];
-        $player->clan = $request->data['clan'];
-        $player->gender = $request->data['gender'];
-        $player->nameday = $request->data['nameday'];
-        $player->guardian = $request->data['guardian']['name'];
-        $player->grand_company = $request->data['grand_company']['name'];
-        $player->last_update_date = $request->last_updated;
+        
+        if($request->data){
+            echo "XIVDB update";
+            $player = PlayerController::set_player_model($player,(object)$request->data);
+            PlayerController::set_mounts($player->id,$request->data['mounts']);
+        }else{
+            echo "Lodestone update";
+            $player = PlayerController::set_player_model($player,$lodestone);
+        }
+        
+        $player->last_update_date = date("Y-m-d H:i:s");
         
         // Workaround - For FreeCompany
         if($lodestone->free_company != null){
@@ -161,16 +149,37 @@ class PlayerController extends Controller
         }
         
         $player->save();
+        
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+    private static function set_player_model($player,$data){
+        $player->world = $data->server;
+        $player->title = $data->title;
+        $player->portrait = $data->portrait;
+        $player->race = $data->race;
+        $player->clan = $data->clan;
+        $player->gender = $data->gender;
+        $player->nameday = $data->nameday;
+        $player->guardian = $data->guardian['name'];
+        if($data->grand_company != null){
+            $player->grand_company = $data->grand_company['name'];
+        }
+        
+        return $player;
+    }
+    
+    private static function set_mounts($player_id,$mounts){
+        foreach($mounts as $obj){
+            $mount = (object)$obj;
+            $player_mount = PlayerMount::where("player_id",$player_id)->where("mount_id",$mount->id)->get()->first();
+            //var_dump($player_mount);
+            if(empty($player_mount)){
+                $player_mount = new PlayerMount();
+                $player_mount->player_id = $player_id;
+                $player_mount->mount_id = $mount->id;
+                $player_mount->save();
+            }
+        }
     }
 }
