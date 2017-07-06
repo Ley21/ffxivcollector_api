@@ -80,9 +80,7 @@ class PlayerController extends Controller
         
         echo "XIVDB update";
         $player = PlayerController::set_player_model($player,(object)$request->data);
-        PlayerController::set_mounts($player->id,$request->data['mounts']);
-        PlayerController::set_minions($player->id,$request->data['minions']);
-        
+
         $player->last_update_date = date("Y-m-d H:i:s");
         
         // Workaround - For FreeCompany
@@ -96,6 +94,9 @@ class PlayerController extends Controller
             
         }
         $player->save();
+        
+        PlayerController::set_mounts($request->lodestone_id,$request->data['mounts']);
+        PlayerController::set_minions($request->lodestone_id,$request->data['minions']);
     }
 
     /**
@@ -167,9 +168,7 @@ class PlayerController extends Controller
         
         echo "XIVDB update";
         $player = PlayerController::set_player_model($player,(object)$request->data);
-        PlayerController::set_mounts($player->id,$request->data['mounts']);
-        PlayerController::set_minions($player->id,$request->data['minions']);
-        
+
         $player->last_update_date = date("Y-m-d H:i:s");
         
         // Workaround - For FreeCompany
@@ -185,7 +184,8 @@ class PlayerController extends Controller
         
         $player->save();
         
-        
+        PlayerController::set_mounts($player->id,$request->data['mounts']);
+        PlayerController::set_minions($player->id,$request->data['minions']);
     }
     
     /**
@@ -262,7 +262,7 @@ class PlayerController extends Controller
                     $player_mount->save();
                 }
                 catch(\Exception $e) {
-                    //echo 'Message: ' .$e->getMessage();
+                    echo 'Message: ' .$e->getMessage();
                 }
             }
         }
@@ -280,7 +280,7 @@ class PlayerController extends Controller
                     $player_minion->save();
                 }
                 catch(\Exception $e) {
-                    //echo 'Message: ' .$e->getMessage();
+                    echo 'Message: ' .$e->getMessage();
                 }
             }
         }
