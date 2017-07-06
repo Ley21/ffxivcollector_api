@@ -13,4 +13,8 @@ public $timestamps = false;
     public function mounts(){
             return $this->hasMany('App\Models\PlayerMount', 'player_id', 'id')->get();
     }
+    
+    public function minions(){
+            return $this->hasMany('App\Models\PlayerMinion', 'player_id', 'id')->get();
+    }
 }

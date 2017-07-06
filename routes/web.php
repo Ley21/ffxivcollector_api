@@ -14,10 +14,13 @@
 //Player
 
 //$app->get('player', "PlayerController@index");
-$app->post('player', "PlayerController@store");
-$app->put('player/{id}', "PlayerController@update");
+$app->post('player/xivdb', "PlayerController@storeXivdb");
+$app->post('player/lodestone', "PlayerController@storeLodestone");
+$app->put('player/{id}/xivdb', "PlayerController@updateXivdb");
+$app->put('player/{id}/lodestone', "PlayerController@updateLodestone");
 $app->get('player/{id}', "PlayerController@show");
 $app->get('player/{id}/mount', "PlayerController@indexMounts");
+$app->get('player/{id}/minion', "PlayerController@indexMinions");
 
 //Minion
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Player;
 use App\Models\PlayerMount;
+use App\Models\PlayerMinion;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -54,13 +55,55 @@ class PlayerController extends Controller
         $player = Player::findOrFail($id);
         return $player->mounts()->toJson();
     }
+    
+    public function indexMinions($id)
+    {
+        $player = Player::findOrFail($id);
+        return $player->minions()->toJson();
+    }
+
+    public function storeXivdb(Request $request)
+    {
+        $this->validate($request, [
+            'lodestone_id' => 'required',
+            'name' => 'required',
+            'server' => 'required',
+            'data' => 'required',
+        ]);
+        //workaround while viion missing fc informations
+        $api = new \Lodestone\Api;
+        $lodestone = (object)$api->getCharacter($request->lodestone_id);
+        
+        $player = new Player();
+        $player->id = $request->lodestone_id;
+        $player->name = $request->name;
+        
+        echo "XIVDB update";
+        $player = PlayerController::set_player_model($player,(object)$request->data);
+        PlayerController::set_mounts($player->id,$request->data['mounts']);
+        PlayerController::set_minions($player->id,$request->data['minions']);
+        
+        $player->last_update_date = date("Y-m-d H:i:s");
+        
+        // Workaround - For FreeCompany
+        if($lodestone->free_company != null){
+            $fc_id = $lodestone->free_company;
+            
+            $player->free_company_id = $fc_id;
+            $fc = (object)$api->getFreeCompany($fc_id);
+            
+            $player->free_company = $fc->name;
+            
+        }
+        $player->save();
+    }
 
     /**
      * Store a newly created resource in storage.
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function storeLodestone(Request $request)
     {
         $this->validate($request, [
             'lodestone_id' => 'required',
@@ -74,14 +117,9 @@ class PlayerController extends Controller
         $player->id = $request->lodestone_id;
         $player->name = $request->name;
         
-        if($request->data){
-            echo "XIVDB update";
-            $player = PlayerController::set_player_model($player,(object)$request->data);
-            PlayerController::set_mounts($player->id,$request->data['mounts']);
-        }else{
-            echo "Lodestone update";
-            $player = PlayerController::set_player_model($player,$lodestone);
-        }
+        echo "Lodestone update";
+        $player = PlayerController::set_player_model($player,$lodestone);
+        
         
         $player->last_update_date = date("Y-m-d H:i:s");
         
@@ -106,7 +144,57 @@ class PlayerController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id, Request $request)
+    public function updateXivdb($id, Request $request)
+    {
+        
+        $this->validate($request, [
+            'lodestone_id' => 'required',
+            'name' => 'required',
+            'server' => 'required',
+            'data' => 'required',
+        ]);
+        $api = new \Lodestone\Api;
+        $lodestone = (object)$api->getCharacter($request->lodestone_id);
+        
+        $player = Player::find($id);
+        
+        // Check if a update is required.
+        $source_date = strtotime(explode(" ",$request->last_updated)[0]);
+        $db_date = strtotime($player->last_update_date);
+        
+        
+        $player->name = $request->name;
+        
+        echo "XIVDB update";
+        $player = PlayerController::set_player_model($player,(object)$request->data);
+        PlayerController::set_mounts($player->id,$request->data['mounts']);
+        PlayerController::set_minions($player->id,$request->data['minions']);
+        
+        $player->last_update_date = date("Y-m-d H:i:s");
+        
+        // Workaround - For FreeCompany
+        if($lodestone->free_company != null){
+            $fc_id = $lodestone->free_company;
+            
+            $player->free_company_id = $fc_id;
+            $fc = (object)$api->getFreeCompany($fc_id);
+            
+            $player->free_company = $fc->name;
+            
+        }
+        
+        $player->save();
+        
+        
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function updateLodestone($id, Request $request)
     {
         
         $this->validate($request, [
@@ -126,15 +214,8 @@ class PlayerController extends Controller
         
         $player->name = $request->name;
         
-        if($request->data){
-            echo "XIVDB update";
-            $player = PlayerController::set_player_model($player,(object)$request->data);
-            PlayerController::set_mounts($player->id,$request->data['mounts']);
-        }else{
-            echo "Lodestone update";
-            $player = PlayerController::set_player_model($player,$lodestone);
-        }
-        
+        echo "Lodestone update";
+        $player = PlayerController::set_player_model($player,$lodestone);
         $player->last_update_date = date("Y-m-d H:i:s");
         
         // Workaround - For FreeCompany
@@ -173,12 +254,34 @@ class PlayerController extends Controller
         foreach($mounts as $obj){
             $mount = (object)$obj;
             $player_mount = PlayerMount::where("player_id",$player_id)->where("mount_id",$mount->id)->get()->first();
-            //var_dump($player_mount);
             if(empty($player_mount)){
-                $player_mount = new PlayerMount();
-                $player_mount->player_id = $player_id;
-                $player_mount->mount_id = $mount->id;
-                $player_mount->save();
+                try{
+                    $player_mount = new PlayerMount();
+                    $player_mount->player_id = $player_id;
+                    $player_mount->mount_id = $mount->id;
+                    $player_mount->save();
+                }
+                catch(\Exception $e) {
+                    //echo 'Message: ' .$e->getMessage();
+                }
+            }
+        }
+    }
+    
+    private static function set_minions($player_id,$minions){
+        foreach($minions as $obj){
+            $minion = (object)$obj;
+            $player_minion = PlayerMinion::where("player_id",$player_id)->where("minion_id",$minion->id)->get()->first();
+            if(empty($player_mount)){
+                try{
+                    $player_minion = new PlayerMinion();
+                    $player_minion->player_id = $player_id;
+                    $player_minion->minion_id = $minion->id;
+                    $player_minion->save();
+                }
+                catch(\Exception $e) {
+                    //echo 'Message: ' .$e->getMessage();
+                }
             }
         }
     }
