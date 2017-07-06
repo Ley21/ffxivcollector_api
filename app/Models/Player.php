@@ -11,10 +11,20 @@ final class Player extends Model
 public $timestamps = false;
 
     public function mounts(){
-            return $this->hasMany('App\Models\PlayerMount', 'player_id', 'id')->get();
+            $mounts = $this->hasMany('App\Models\PlayerMount', 'player_id', 'id')->get()->toArray();
+            $mounts = array_map(function($m){
+                return $m["mount_id"];
+            },$mounts);
+            return $mounts;
     }
     
     public function minions(){
-            return $this->hasMany('App\Models\PlayerMinion', 'player_id', 'id')->get();
+            $minions = $this->hasMany('App\Models\PlayerMinion', 'player_id', 'id')->get()->toArray();
+            
+            $minions = array_map(function($m){
+                return $m["minion_id"];
+            },$minions);
+            return $minions;
+            
     }
 }

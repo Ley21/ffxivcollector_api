@@ -53,13 +53,13 @@ class PlayerController extends Controller
     public function indexMounts($id)
     {
         $player = Player::findOrFail($id);
-        return $player->mounts()->toJson();
+        return $player->mounts();
     }
     
     public function indexMinions($id)
     {
         $player = Player::findOrFail($id);
-        return $player->minions()->toJson();
+        return $player->minions();
     }
 
     public function storeXivdb(Request $request)
