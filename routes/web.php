@@ -26,13 +26,19 @@ $app->get('player/{id}/minion', "PlayerController@indexMinions");
 
 $app->get('minion', "MinionController@index");
 $app->get('minion/{id}', "MinionController@show");
-$app->get('minion/{id}?data=verminion', "MinionController@verminion");
 $app->post('minion', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MinionController@store"]);
 $app->put('minion/{id}', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MinionController@update"]);
+    
+$app->post('minion/{id}/method', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MinionController@storeMethod"]);
+$app->put('minion/{id}/method', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MinionController@updateMethodes"]);
 
 //Mount
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Minion;
 use App\Models\Verminion;
+use App\Models\MinionMethod;
 use Illuminate\Http\Request;
 
 class MinionController extends Controller
@@ -18,11 +19,6 @@ class MinionController extends Controller
         //
     }
 
-    public function verminion($id){
-        $verminion = Minion::find($id)->verminion()->getResults();
-        return $verminion->toJson();
-    }
-    
     /**
      * Retrieve the user for the given ID.
      *
@@ -121,6 +117,46 @@ class MinionController extends Controller
         
         $minion->save();
         $verminion->save();
+    }
+    
+    public function storeMethod(Request $request)
+    {
+        
+         $this->validate($request, [
+            'id' => 'required',
+            'methodes' => 'required',
+        ]);
+        
+        foreach($request->methodes as $method){
+            $method_object = new MinionMethod();
+            $method_object->minion_id = $request->id;
+            $method_object->method_name = $method['method'];
+            $method_object->available = $method['available'];
+            $method_object->description_en = $method['method_description_en'] ?? "";
+            $method_object->description_fr = $method['method_description_fr'] ?? "";
+            $method_object->description_de = $method['method_description_de'] ?? "";
+            $method_object->description_ja = $method['method_description_ja'] ?? "";
+            $method_object->save();
+        }
+    }
+    
+    public function updateMethodes(Request $request)
+    {
+        
+         $this->validate($request, [
+            'id' => 'required',
+            'methodes' => 'required',
+        ]);
+        
+        foreach($request->methodes as $method){
+            $method_object = MinionMethod::where('minion_id',$request->id)->where('method_name',$method['method'])->first();
+            $method_object->available = $method['available'];
+            $method_object->description_en = $method['method_description_en'] ?? "";
+            $method_object->description_fr = $method['method_description_fr'] ?? "";
+            $method_object->description_de = $method['method_description_de'] ?? "";
+            $method_object->description_ja = $method['method_description_ja'] ?? "";
+            $method_object->save();
+        }
     }
 
 

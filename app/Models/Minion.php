@@ -13,4 +13,11 @@ public $timestamps = false;
             return $this->hasOne('App\Models\Verminion', 'id', 'id');
     }
     
+    public function methodes(){
+            return $this->hasMany('App\Models\MinionMethod', 'minion_id', 'id');
+    }
+    
+     protected $with = array('verminion','methodes');
+
+    
 }
