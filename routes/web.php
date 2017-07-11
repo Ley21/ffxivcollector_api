@@ -51,6 +51,13 @@ $app->put('mount/{id}', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
     'uses' => "MountController@update"]);
     
+$app->post('mount/{id}/method', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MountController@storeMethod"]);
+$app->put('mount/{id}/method', [
+    'middleware' => App\Http\Middleware\BasicAuth::class,
+    'uses' => "MountController@updateMethodes"]);
+    
 //Search
     
 $app->get('search', ['as' => 'search', 'uses' => 'SearchController@search']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mount;
+use App\Models\MountMethod;
 use Illuminate\Http\Request;
 
 class MountController extends Controller
@@ -90,6 +91,46 @@ class MountController extends Controller
         $mount->summon_ja = $request->summon_ja;
         
         $mount->save();
+    }
+    
+    public function storeMethod(Request $request)
+    {
+        
+         $this->validate($request, [
+            'id' => 'required',
+            'methodes' => 'required',
+        ]);
+        
+        foreach($request->methodes as $method){
+            $method_object = new MountMethod();
+            $method_object->mount_id = $request->id;
+            $method_object->method_name = $method['method'];
+            $method_object->available = $method['available'];
+            $method_object->description_en = $method['method_description_en'] ?? "";
+            $method_object->description_fr = $method['method_description_fr'] ?? "";
+            $method_object->description_de = $method['method_description_de'] ?? "";
+            $method_object->description_ja = $method['method_description_ja'] ?? "";
+            $method_object->save();
+        }
+    }
+    
+    public function updateMethodes(Request $request)
+    {
+        
+         $this->validate($request, [
+            'id' => 'required',
+            'methodes' => 'required',
+        ]);
+        
+        foreach($request->methodes as $method){
+            $method_object = MountMethod::where('mount_id',$request->id)->where('method_name',$method['method'])->first();
+            $method_object->available = $method['available'];
+            $method_object->description_en = $method['method_description_en'] ?? "";
+            $method_object->description_fr = $method['method_description_fr'] ?? "";
+            $method_object->description_de = $method['method_description_de'] ?? "";
+            $method_object->description_ja = $method['method_description_ja'] ?? "";
+            $method_object->save();
+        }
     }
 
 
