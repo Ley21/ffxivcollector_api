@@ -11,7 +11,7 @@ final class PlayerMount extends Model
     protected $primaryKey = null;
     public $incrementing = false;
     protected $fillable = array('player_id', 'mount_id');
-    
+    protected $hidden = ['player_id'];
     protected $table = 'FK_player_mount';
     public $timestamps = false;
     

@@ -50,18 +50,6 @@ class PlayerController extends Controller
     }
 
 
-    public function indexMounts($id)
-    {
-        $player = Player::findOrFail($id);
-        return $player->mounts();
-    }
-    
-    public function indexMinions($id)
-    {
-        $player = Player::findOrFail($id);
-        return $player->minions();
-    }
-
     public function storeXivdb(Request $request)
     {
         $this->validate($request, [
