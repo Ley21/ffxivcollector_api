@@ -40,6 +40,19 @@ class MinionController extends Controller
     {
         return Minion::all()->toJson();
     }
+    
+    public function indexLatest()
+    {
+        $patches = Minion::select('patch')->groupBy('patch')->get()->toArray();
+        $patch_decimal = array();
+        foreach($patches as $patch){
+            $patch_decimal[] = $patch['patch'];
+        }
+        $latest_patch = max($patch_decimal);
+        
+        $latest_minions = Minion::where('patch',"$latest_patch")->get();
+        return $latest_minions->toJson();
+    }
 
     /**
      * Store a newly created resource in storage.

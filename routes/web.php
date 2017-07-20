@@ -23,6 +23,7 @@ $app->get('player/{id}', "PlayerController@show");
 //Minion
 
 $app->get('minion', "MinionController@index");
+$app->get('minion/latest', "MinionController@indexLatest");
 $app->get('minion/{id}', "MinionController@show");
 $app->post('minion', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
@@ -41,6 +42,7 @@ $app->put('minion/{id}/method', [
 //Mount
 
 $app->get('mount', "MountController@index");    
+$app->get('mount/latest', "MountController@indexLatest");   
 $app->get('mount/{id}', "MountController@show");
 $app->post('mount', [
     'middleware' => App\Http\Middleware\BasicAuth::class,
