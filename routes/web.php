@@ -61,3 +61,7 @@ $app->put('mount/{id}/method', [
 //Search
     
 $app->get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+
+//Language
+$app->get('lang/minion', "LanguageController@indexMinions");
+$app->get('lang/mount', "LanguageController@indexMounts");
